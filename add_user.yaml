@@ -1,0 +1,15 @@
+---
+- hosts: localhost # Some spacing or indentation errors (important to YAML)
+  vars: #Need another variable for the user name
+    remote_user: root
+  tasks:
+  - name: User input
+    shell: useradd newuser #Note: this won't be idempotent as we will get an error if we re-run and the user exists. Should move to later in the playbook after we verify if the user exists. Also need to use variable for the user name
+  - name: Add a line to a file, if the file does not exist
+    lineinfile:
+      path: /etc/passwd
+      line: newuser
+      create: yes #Corrected to be lowercase
+  - name: Synce /usr/passwd with NIS DB
+    #shell: cat/etc/shadow >> etc/passwd #Should use the ypinit -m command to resync the database
+    shell: cat /etc/shadow >> /etc/passwd #Corrected spacing and slashes
